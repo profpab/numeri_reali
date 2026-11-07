@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dai razionali ai numeri reali - prof p@b</title>
+    
+    <!-- CSS KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-teal: #14b8a6;
+            --accent-cyan: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        header h1 {
+            font-size: 2.4rem;
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+        }
+
+        .author {
+            display: inline-block;
+            background: var(--accent-teal);
+            color: #0f172a;
+            font-weight: bold;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            color: var(--accent-teal);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        p, li {
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .card-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .card-item h3 {
+            color: var(--text-main);
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(20, 184, 166, 0.15);
+            color: var(--accent-teal);
+            border: 1px solid var(--accent-teal);
+            padding: 3px 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        .interactive-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px dashed var(--accent-teal);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        canvas {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            max-width: 100%;
+            display: block;
+            margin: 15px auto;
+        }
+
+        input[type="text"] {
+            padding: 10px 14px;
+            width: 60%;
+            max-width: 320px;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: var(--accent-teal);
+            border: none;
+            color: #0f172a;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+        button:active { transform: scale(0.98); }
+
+        #result-box {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-height: 30px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quiz-btn {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            text-align: left;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-btn:hover {
+            border-color: var(--accent-teal);
+            background: rgba(20, 184, 166, 0.05);
+        }
+
+        .correct { background: rgba(34, 197, 94, 0.2) !important; border-color: #22c55e !important; color: #4ade80 !important; }
+        .wrong { background: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; color: #f87171 !important; }
+
+        .hist-note {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 12px 16px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Dai razionali ai numeri reali</h1>
+        <p>Come la radice di 2 ha mostrato i limiti dei numeri razionali[cite: 1]</p>
+        <div class="author">prof p@b</div>
+    </header>
+
+    <!-- 1. FONDAMENTI -->
+    <section>
+        <h2>1. Fondamenti dei Numeri Razionali</h2>
+        <p>L'evoluzione numerica nasce da precise esigenze di calcolo e misura:</p>
+        <div class="grid-3">
+            <div class="card-item">
+                <h3>Numeri Naturali ($\mathbb{N}$)</h3>
+                <p>Servono a contare gli elementi (cardinalità). Chiusi rispetto a somma e prodotto[cite: 2, 3].</p>
+                <div class="badge">$\mathbb{N} = \{1, 2, 3, ...\}$[cite: 2]</div>
+            </div>
+            <div class="card-item">
+                <h3>Numeri Interi ($\mathbb{Z}$)</h3>
+                <p>Includono i valori negativi generati dalle differenze[cite: 2, 3].</p>
+                <div class="badge">$\mathbb{Z} = \{..., -2, -1, 0, 1, 2\}$[cite: 2]</div>
+            </div>
+            <div class="card-item">
+                <h3>Numeri Razionali ($\mathbb{Q}$)</h3>
+                <p>Rapporti tra interi $\frac{a}{b}$ con $b \neq 0$. Consentono la divisione[cite: 2, 3].</p>
+                <div class="badge">$\mathbb{Q} = \{\frac{a}{b} \mid a,b \in \mathbb{Z}, b \neq 0\}$</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. IL CASO DI RADICE DI 2 -->
+    <section>
+        <h2>2. La Scoperta degli Irrazionali e il Problema di $\sqrt{2}$</h2>
+        <p>Prendiamo un quadrato di lato $1$: per il Teorema di Pitagora, la diagonale misura $\sqrt{2}$[cite: 5, 6].</p>
+        
+        <canvas id="geoCanvas" width="450" height="220"></canvas>
+
+        <p>Si cercò a lungo di esprimere $\sqrt{2}$ come rapporto tra interi ($\frac{a}{b}$), ma fu dimostrato che <strong>non è una frazione</strong> ($\sqrt{2} \notin \mathbb{Q}$)[cite: 6].</p>
+        
+        <div class="hist-note">
+            <strong>Nota storica:</strong> La leggenda narra che <em>Ippaso di Metaponto</em> pagò con la vita (o con l'esilio dalla scuola pitagorica) la rivelazione di questa scoperta sconvolgente[cite: 6].
+        </div>
+    </section>
+
+    <!-- 3. I NUMERI REALI E LA RETTA -->
+    <section>
+        <h2>3. L'Insieme dei Numeri Reali ($\mathbb{R}$) e la Retta</h2>
+        <p>I numeri reali uniscono in un unico grande insieme razionali e irrazionali[cite: 9]:</p>
+        <ul>
+            <li><strong>Razionali ($\mathbb{Q}$):</strong> Interi, decimali limitati o decimali illimitati periodici[cite: 8].</li>
+            <li><strong>Irrazionali:</strong> Numeri decimali illimitati <em>aperiodici</em> (come $\sqrt{2}$, $\pi$, $e$)[cite: 8].</li>
+        </ul>
+        <p style="margin-top: 10px;"><strong>La Retta Reale:</strong> A ogni punto della retta corrisponde un numero reale e viceversa. I reali <em>colmano tutti i buchi</em> lasciati dai razionali[cite: 9].</p>
+    </section>
+
+    <!-- 4. QUANTI NUMERI CI SONO (CANTOR) -->
+    <section>
+        <h2>4. Quanti Numeri Ci Sono? (L'Infinito di Cantor)</h2>
+        <p>Sebbene i numeri naturali, interi e razionali siano infiniti, <strong>si possono elencare uno dopo l'altro</strong> (infinità numerabile)[cite: 10].</p>
+        <p>Georg Cantor ha dimostrato che i numeri reali <strong>non si possono elencare</strong> in un elenco completo: hanno la <em>potenza del continuo</em>, essendo tanti quanti i punti di una retta[cite: 10].</p>
+    </section>
+
+    <!-- 5. ESPLORATORE DI NUMERI -->
+    <section>
+        <h2>5. Esploratore e Classificatore di Numeri</h2>
+        <p>Digita un numero o un simbolo ($\sqrt{2}$, $\pi$, $e$, frazioni o decimali) per verificarne la classificazione:</p>
+        <div class="interactive-box">
+            <input type="text" id="numInput" placeholder="Es. sqrt(2), pi, 3/4, -7">
+            <button onclick="classify()">Analizza</button>
+            <div id="result-box"></div>
+        </div>
+    </section>
+
+    <!-- 6. QUIZ INTERATTIVO -->
+    <section>
+        <h2>6. Mini Quiz di Verifica</h2>
+        <p id="quiz-question">In che modo i numeri reali differiscono dai numeri razionali sulla retta numerica?</p>
+        <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkAnswer(false, this)">A) I reali rappresentano solo i numeri negativi.</button>
+            <button class="quiz-btn" onclick="checkAnswer(true, this)">B) I reali colmano tutti i "buchi" lasciati dai razionali sulla retta[cite: 9].</button>
+            <button class="quiz-btn" onclick="checkAnswer(false, this)">C) I razionali coprono più punti dei reali.</button>
+        </div>
+    </section>
+</div>
+
+<!-- JS KaTeX -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ],
+            throwOnError: false
+        });
+        drawCanvas();
+    });
+
+    function drawCanvas() {
+        const canvas = document.getElementById('geoCanvas');
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const x = 60, y = 30, size = 130;
+
+        // Quadrato
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(x, y, size, size);
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.05)';
+        ctx.fillRect(x, y, size, size);
+
+        // Diagonale
+        ctx.beginPath();
+        ctx.setLineDash([6, 6]);
+        ctx.moveTo(x, y + size);
+        ctx.lineTo(x + size, y);
+        ctx.strokeStyle = '#14b8a6';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Etichette geometriche
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '15px sans-serif';
+        ctx.fillText('lato = 1', x + size/2 - 25, y + size + 25);
+        ctx.fillText('lato = 1', x - 65, y + size/2);
+        
+        ctx.fillStyle = '#14b8a6';
+        ctx.font = 'bold 17px sans-serif';
+        ctx.fillText('diagonale = √2', x + size + 25, y + size/2);
+    }
+
+    function classify() {
+        let val = document.getElementById('numInput').value.trim().toLowerCase();
+        let res = document.getElementById('result-box');
+        
+        if(!val) {
+            res.innerHTML = "<span style='color: #ef4444;'>Inserisci un valore valido.</span>";
+            return;
+        }
+
+        if(val.includes('sqrt(2)') || val.includes('radice') || val === '√2') {
+            res.innerHTML = "Risultato: <span style='color: var(--accent-cyan)'>Numero Irrazionale</span> ($\\sqrt{2} \\notin \\mathbb{Q}, \\sqrt{2} \\in \\mathbb{R}$). Decimale illimitato aperiodico.";
+        } else if(val.includes('pi') || val === 'π') {
+            res.innerHTML = "Risultato: <span style='color: var(--accent-cyan)'>Numero Irrazionale</span> ($\\pi \\approx 3.14159...$).";
+        } else if(val.includes('e') && val.length === 1) {
+            res.innerHTML = "Risultato: <span style='color: var(--accent-cyan)'>Numero Irrazionale di Nepero</span> ($e \\approx 2.71828...$).";
+        } else if(val.includes('/') || !isNaN(val)) {
+            res.innerHTML = "Risultato: <span style='color: var(--accent-teal)'>Numero Razionale</span> ($\\in \\mathbb{Q}$ e $\\in \\mathbb{R}$).";
+        } else {
+            res.innerHTML = "Risultato: Analizzato come elemento dei <span style='color: var(--accent-cyan)'>Numeri Reali ($\\mathbb{R}$)</span>.";
+        }
+
+        renderMathInElement(res, {
+            delimiters: [{left: '$', right: '$', display: false}],
+            throwOnError: false
+        });
+    }
+
+    function checkAnswer(isCorrect, btn) {
+        let buttons = document.querySelectorAll('.quiz-btn');
+        buttons.forEach(b => b.style.pointerEvents = 'none');
+        
+        if(isCorrect) {
+            btn.classList.add('correct');
+            btn.innerHTML += " ✅ Corretto!";
+        } else {
+            btn.classList.add('wrong');
+            btn.innerHTML += " ❌ Errato. La risposta corretta è la B.";
+        }
+    }
+</script>
+
+</body>
+</html>
